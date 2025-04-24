@@ -10,6 +10,9 @@
     "test": "jest",
     "lint": "eslint . --ext .ts"
   },
+  "engines": {
+    "node": "23.7"
+  },
   "keywords": [
     "performance",
     "accessibility",
