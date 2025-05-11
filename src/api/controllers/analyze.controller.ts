@@ -1,25 +1,28 @@
 import { Request, Response, NextFunction } from "express";
 import { AnalyzerService } from "../../services/analyzer.service";
 import logger from "../../utils/logger";
-import { error } from "console";
 
+// Explicitly type the function to match Express's expected handler signature
 export const analyzeUrl = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
+  // Return type changed to void
   try {
     const { url } = req.body;
 
     if (!url) {
-      return res.status(400).json({ error: "URL is required" });
+      res.status(400).json({ error: "URL is required" });
+      return;
     }
 
     // Validate URL
     try {
       new URL(url);
     } catch (error) {
-      return res.status(400).json({ error: "Invalid URL format" });
+      res.status(400).json({ error: "Invalid URL format" });
+      return;
     }
 
     // Perform analysis synchronously
@@ -30,16 +33,18 @@ export const analyzeUrl = async (
       const analysisResult = await analyzerService.analyzeWebsite(url);
 
       // Return the complete analysis results
-      return res.status(200).json(analysisResult);
+      res.status(200).json(analysisResult);
+      return;
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error occurred";
       logger.error(`Error analyzing ${url}: ${errorMessage}`);
-      return res.status(500).json({
+      res.status(500).json({
         error: "Analysis failed",
         message: "Something went wrong! Try again with different url", // errorMessage,
         url,
       });
+      return;
     }
   } catch (error: unknown) {
     const errorMessage =

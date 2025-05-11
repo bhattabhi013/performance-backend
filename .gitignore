@@ -22,6 +22,11 @@ pnpm-debug.log*
 *.seed
 *.pid.lock
 
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
 # OS-specific files
 .DS_Store
 Thumbs.db
